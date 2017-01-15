@@ -41,6 +41,10 @@ h1 {
 h2 {
 	color: #353434;
 	font-size: 2em;
+	text-transform: capitalize;
+}
+#submit_button {
+	text-transform: lowercase;
 }
 #submit_button,
 p {
@@ -197,6 +201,9 @@ body {
 }
 #submit_button {
 	width: 90px;
+	background: #dc143c;
+	color: white;
+	font-weight: bold;
 }
 .wrapper-img input {
 	padding: 10px;

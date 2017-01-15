@@ -273,7 +273,8 @@ app.isMurdererInteractive = function() {
     const randomNumber = randomTime(100, 600);
 
     $('.wrapper-answer, .wrapper-again, #murder-interactive').removeClass('js-hide');
-    $('.wrapper-answer h2').html('Yes →');
+    
+    console.log(get_input_name)
 
     // console.log( app.userData['facebook'][randomNumber] );
 
@@ -288,7 +289,7 @@ app.isMurdererInteractive = function() {
 app.isNotMurdererInteractive = function() {
     // console.log('NOPE');
     $('.wrapper-answer').removeClass('js-hide');
-    $('.wrapper-answer h2').html('No ... some funny joke →');
+    $('.wrapper-answer h2').html('Nothing suspicious going on here. ');
     $('#murder-interactive, .wrapper-again  ').addClass('js-hide');
 }
 
@@ -299,15 +300,17 @@ app.isNotMurdererInteractive = function() {
 -----------------------------------------------------------------------
 */
 let how_paranoid_value;
+let get_input_name;
 $('#submit_button').click(function() {
 
     how_paranoid_value = $('input[name="how_paranoid"]:checked').val();
     
-    console.log( 'wrk' );
+    var get_input_name = $('input[name="friends-name"]').val();
 
-
-    if ( $('input[name="friends-name"]').val() == 'conor holler' || $('input[name="friends-name"]').val() == 'Conor Holler' && how_paranoid_value !== 0) {
+    if ( get_input_name == 'conor holler' || get_input_name == 'Conor Holler' && how_paranoid_value !== 0) {
         app.isMurdererInteractive();
+
+        $('.wrapper-answer h2').html(get_input_name);
         // console.log('yes');
     } else if ( $('input[name="friends-name"]').val() !== 'conor holler' && how_paranoid_value !== 0 ) {
         // console.log('no');
@@ -325,19 +328,3 @@ $('#submit_button').click(function() {
 $('button.js-reset').on('click',function(){
     app.isMurdererInteractive();
 });
-
-
-/*
-----------------------------------------------------------------------
-6. doc ready 
------------------------------------------------------------------------
-*/
-
-function myFunction() {
-    setTimeout(function(){ 
-        // alert("Hello");
-     }, 3000);
-}
-
-
-
