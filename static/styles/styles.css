@@ -93,21 +93,21 @@ main section {
     border: 5px solid var(--base);
 }
 
-.wrapper-img img:hover {
-    /*border: 5px solid var(--base);*/
-}
 
 .input-wrap {
     display: block;
+    margin: 20px 0;
     padding: 10px;
 }
 
-input[type="radio"] + label {
-	/*margin-left: 10px;*/
+input[type="radio"] {
+	margin-left: 10px; 
 }
 
 input[type="radio"]:checked+label {
     font-weight: bold;
+    color: var(--base);
+    background: lightgrey;
 }
 
 
@@ -186,11 +186,7 @@ body {
 
 
 /*================ Section: buttons ================*/
-div.input-wrap {
-	clear: both;
-	margin: 0;
-	clear: both;
-}
+
 .row {
 	width: 100%;
 	height: 1px;
@@ -219,22 +215,22 @@ label {
 }
 
 /* hide input */
-input.radio:empty {
+/*input.radio:empty {
 	margin-left: -999px;
-}
+}*/
 
 /* style label */
-input.radio:empty ~ label {
-	position: relative;
-	float: left;
+input.radio ~ label {
+	/*position: relative;*/
+	/*float: left;*/
 	line-height: 2.5em;
 	text-indent: 3.25em;
-	margin-top: 2em;
-	cursor: pointer;
+	margin-top: -32px;
+	cursor: pointer;/*
 	-webkit-user-select: none;
 	-moz-user-select: none;
 	-ms-user-select: none;
-	user-select: none;
+	user-select: none;*/
 }
 
 input.radio:empty ~ label:before {
