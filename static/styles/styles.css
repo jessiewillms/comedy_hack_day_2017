@@ -1,39 +1,278 @@
 /*================ Section: CSS setup ================*/
 
-* { box-sizing: border-box } 
+* {
+    box-sizing: border-box
+}
+
+
+.cf:before,
+.cf:after {
+    content: " "; /* 1 */
+    display: table; /* 2 */
+}
+
+.cf:after {
+    clear: both;
+}
+
+/**
+ * For IE 6/7 only
+ * Include this rule to trigger hasLayout and contain floats.
+ */
+.cf {
+    *zoom: 1;
+}
+
+@font-face {
+    font-family: 'JINKY';
+    src: url('../jinky/JINKY.ttf');
+    src: url('../jinky/JINKY-webfont.eot?iefix') format('eot'), url('../jinky/JINKY-webfont.woff') format('woff'), url('../jinky/JINKY-webfont.ttf') format('truetype'), url('../jinky/JINKY-webfont.svg#JINKY-webfont') format('svg');
+}
+
+h1 {
+    font-family: 'JINKY';
+    font-size: 200px;
+    text-align: center;
+    
+    margin: 0;
+    padding: 3%;
+}
+
+h2 {
+	color: #353434;
+	font-size: 2em;
+}
+#submit_button,
+p {
+	font-family: 'Roboto', sans-serif;
+}
 
 /*================ Section: CSS variables ================*/
 
 :root {
-  --base: #ffc600;
-  --spacing: 10px;
-  --blur: 10px;
+    --base: #ffc600;
+    --darker: #dc143c;
+    --spacing: 10px;
+    --blur: 10px;
 }
+
 
 /*================ Section: Base CSS ================*/
 
 img {
-	max-width: 100%;
-	margin: 0;
-	padding: 0;
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
 }
 
-.js-hide { display: none; }
+.js-hide {
+    display: none;
+}
+
 
 /*================ Section: Project CSS ================*/
-.wrapper-img img {
-	max-width: 20%;
-	border: 5px solid transparent;
-	float: left;
+
+main {
+    padding: 20px;
+    background: white;
 }
-.wrapper-img img.js-active { border: 5px solid var(--base); }
+
+main section {
+	max-width: 50%;
+	display: block;
+	margin: 0 auto;
+	padding: 20px 0;
+}
+.wrapper-img img {
+    max-width: 20%;
+    border: 5px solid transparent;
+    float: left;
+}
+
+.wrapper-img img.js-active {
+    border: 5px solid var(--base);
+}
 
 .wrapper-img img:hover {
-	/*border: 5px solid var(--base);*/
+    /*border: 5px solid var(--base);*/
 }
 
 .input-wrap {
-	display: block;
+    display: block;
+    padding: 10px;
 }
 
-input[type="radio"]:checked+label {font-weight:bold;}
+input[type="radio"] + label {
+	/*margin-left: 10px;*/
+}
+
+input[type="radio"]:checked+label {
+    font-weight: bold;
+}
+
+
+/*================ Section: Type ================*/
+html,
+body {
+  height: 100%;
+}
+
+body {
+	background: -webkit-radial-gradient(center, #dc143c, #580818);
+	background: -moz-radial-gradient(center, #dc143c, #580818);
+	background: -o-radial-gradient(center, #dc143c, #580818);
+	background: -ms-radial-gradient(center, #dc143c, #580818);
+	background: radial-gradient(center, #dc143c, #580818);
+}
+
+.slashed {
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 100vh;
+    text-shadow: 3px 3px 3px rgba(0, 0, 0, 0.5);
+}
+
+.slashed .top,
+.slashed .bot {
+    text-align: center;
+    font: 175px/100px arial;
+    text-transform: uppercase;
+    text-align: center;
+    overflow: hidden;
+    color: #fff;
+}
+
+.slashed .top:before,
+.slashed .bot:before {
+    content: attr(title);
+    -webkit-transform: rotate(5deg);
+    -moz-transform: rotate(5deg);
+    -o-transform: rotate(5deg);
+    -ms-transform: rotate(5deg);
+    transform: rotate(5deg);
+}
+
+.slashed .top {
+    position: absolute;
+    top: 0;
+    left: 5px;
+    right: 0;
+    bottom: 50%;
+}
+
+.slashed .top:before {
+    position: absolute;
+    bottom: -50px;
+    left: 0;
+    right: 0;
+}
+
+.slashed .bot {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 5px;
+    bottom: 0;
+}
+
+.slashed .bot:before {
+    position: absolute;
+    top: -50px;
+    left: 0;
+    right: 0;
+}
+
+
+/*================ Section: buttons ================*/
+div.input-wrap {
+	clear: both;
+	margin: 0;
+	clear: both;
+}
+.row {
+	width: 100%;
+	height: 1px;
+	background: #D1D3D4;
+	display: block;
+	margin: 20px auto 0 auto;
+	clear: both;
+}
+#submit_button {
+	width: 90px;
+}
+.wrapper-img input {
+	padding: 10px;
+	border: 1px solid #D1D3D4;
+	border-radius: 3px;
+	width: calc(97% - 90px);
+}
+
+label {
+  width: 100%;
+  display: block;
+  margin: 0 auto;
+  padding-right: 10px;
+  border-radius: 3px;
+  border: 1px solid #D1D3D4
+}
+
+/* hide input */
+input.radio:empty {
+	margin-left: -999px;
+}
+
+/* style label */
+input.radio:empty ~ label {
+	position: relative;
+	float: left;
+	line-height: 2.5em;
+	text-indent: 3.25em;
+	margin-top: 2em;
+	cursor: pointer;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+input.radio:empty ~ label:before {
+	position: absolute;
+	display: block;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	content: '';
+	width: 2.5em;
+	background: #D1D3D4;
+	border-radius: 3px 0 0 3px;
+}
+
+/* toggle hover */
+input.radio:hover:not(:checked) ~ label:before {
+	content:'\2714';
+	text-indent: .9em;
+	color: #C2C2C2;
+}
+
+input.radio:hover:not(:checked) ~ label {
+	color: #888;
+}
+
+/* toggle on */
+input.radio:checked ~ label:before {
+	content:'\2714';
+	text-indent: .9em;
+	color: white;
+	background-color: var(--darker);
+}
+
+input.radio:checked ~ label {
+	color: #777;
+}
+
+/* radio focus */
+input.radio:focus ~ label:before {
+	box-shadow: 0 0 0 3px #999;
+}

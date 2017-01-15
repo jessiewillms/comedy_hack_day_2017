@@ -297,22 +297,21 @@ app.isNotMurdererInteractive = function() {
 -----------------------------------------------------------------------
 */
 let how_paranoid_value;
-$('.person-img').click(function() {
+$('#submit_button').click(function() {
 
     how_paranoid_value = $('input[name="how_paranoid"]:checked').val();
-    // console.log(how_paranoid_value);
+    
+    console.log( 'wrk' );
 
-    $('.person-img').removeClass('js-active');
-    $(this).addClass('js-active');
 
-    if ( $(this).data('is-murderer') == 'yes' && how_paranoid_value !== 0) {
-        // console.log('yes');
+    if ( $('input[name="friends-name"]').val() == 'conor holler' || $('input[name="friends-name"]').val() == 'Conor Holler' && how_paranoid_value !== 0) {
         app.isMurdererInteractive();
-    } else if ( $(this).data('is-murderer') == 'no' && how_paranoid_value !== 0 ) {
+        // console.log('yes');
+    } else if ( $('input[name="friends-name"]').val() !== 'conor holler' && how_paranoid_value !== 0 ) {
         // console.log('no');
         app.isNotMurdererInteractive();
     } else {
-        alert('pick something');
+        console.log('pick something');
     }
 });
 
@@ -324,3 +323,19 @@ $('.person-img').click(function() {
 $('button.js-reset').on('click',function(){
     app.isMurdererInteractive();
 });
+
+
+/*
+----------------------------------------------------------------------
+6. doc ready 
+-----------------------------------------------------------------------
+*/
+
+function myFunction() {
+    setTimeout(function(){ 
+        // alert("Hello");
+     }, 3000);
+}
+
+
+

@@ -1,75 +1,72 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <title>comedy hack day 2017</title>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-  <link rel="stylesheet" href="http://necolas.github.io/normalize.css/3.0.2/normalize.css" />
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="styles/styles.css">
-
+    <meta charset="UTF-8">
+    <title>comedy hack day 2017</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="http://necolas.github.io/normalize.css/3.0.2/normalize.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="styles/styles.css">
 </head>
+
 <body>
-  
-  <main>
-    <header>
-      <h1>truth collage</h1>
-    </header>
+    <div class="outer-wrapper">
+        <header class="slashed">
+            <div class="top" title="crime wall"></div>
+            <div class="bot" title="crime wall"></div>
+        </header>
+    </div>
+    <main class="cf">
+        <section class="cf">
+            <h2>How paranoid are you?</h2>
+            <div class="input-wrap">
+                <input type="radio" name="how_paranoid" value="1" class="radio" id="r1" />
+                <label for="r1">Russian Hacks</label>
+            </div>
+            <div class="input-wrap">
+                <input type="radio" name="how_paranoid" value="2" class="radio" id="r2" />
+                <label for="r1">Moon Landing Hoax</label>
+            </div>
+            <div class="input-wrap">
+                <input type="radio" name="how_paranoid" value="3" class="radio" id="r3" />
+                <label for="r1">Jet Fuel Can’t Melt Steel</label>
+            </div>
+            <div class="input-wrap">
+                <input type="radio" name="how_paranoid" value="4" class="radio" id="r4" />
+                <label for="r1">The Davinci Code Was Real</label>
+            </div>
+            <div class="input-wrap">
+                <input type="radio" name="how_paranoid" value="5" class="radio" id="r5" />
+                <label for="r1">Lizard People Killed Jean Benet</label>
+            </div>
 
-    <section>
-      <p>How paranoid are you?</p>
-      
-      <div class="input-wrap">
-        <input type="radio" name="how_paranoid" value="1" id="r1" /><label for="r1">Russian Hacks</label>
-      </div>
 
-      <div class="input-wrap">
-        <input type="radio" name="how_paranoid" value="2" id="r2" /><label for="r1">Moon Landing Hoax</label>
-      </div>
-
-      <div class="input-wrap">
-        <input type="radio" name="how_paranoid" value="3" id="r3" /><label for="r1">Jet Fuel Can’t Melt Steel</label>
-      </div>
-
-      <div class="input-wrap">
-        <input type="radio" name="how_paranoid" value="4" id="r4" /><label for="r1">The Davinci Code Was Real</label>
-      </div>
-
-      <div class="input-wrap">
-        <input type="radio" name="how_paranoid" value="5" id="r5" /><label for="r1">Lizard People Killed Jean Benet</label>
-      </div>
-      
-      <hr>
-      <p>which friend?</p>
-
-      <div class="wrapper-img">
-        <img src="https://placebear.com/300/300" alt="" class="person-img" data-is-murderer="no">
-        <img src="https://placebear.com/300/300" alt="" class="person-img" data-is-murderer="yes">
-        <img src="https://placebear.com/300/300" alt="" class="person-img" data-is-murderer="no">
-        <img src="https://placebear.com/300/300" alt="" class="person-img" data-is-murderer="no">
-        <img src="https://placebear.com/300/300" alt="" class="person-img" data-is-murderer="no">
-      </div>
-  
-
-        
-
-      <div class="wrapper-answer js-hide">
-        <h2></h2>
-      </div>
-
-    </section>
-
-    <section id="murder-interactive" class="js-hide">
-    	<canvas id='wall'></canvas>
-    </section>
-
-    <section class="wrapper wrapper-again js-hide">
-    	<button class="js-reset">reset</button>
-    </section>
-  </main>
-
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-<script src='scripts/app.js'></script>
-<!-- <script src='./wall.js'></script> -->
+        </section>
+        <div class="row"></div>
+        <section class="cf">
+            <h2>which friend?</h2>
+            <div class="wrapper-img">
+                <input type="text" placeholder="friend's name" id="js-friends-name" name="friends-name">
+                <input type="submit" id="submit_button">
+            </div>
+        </section>
+        <section class="cf">
+            <div class="wrapper-answer js-hide">
+                <h2></h2>
+            </div>
+        </section>
+        <div id="murder-interactive" class="js-hide">
+            <canvas id='wall'></canvas>
+        </div>
+        <section class="wrapper wrapper-again js-hide">
+            <button class="js-reset">reset</button>
+        </section>
+    </main>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <script src='scripts/app.js'></script>
+    <!-- <script src='./wall.js'></script> -->
 </body>
+
 </html>
