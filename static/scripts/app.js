@@ -22,7 +22,7 @@ var getData = $.getJSON(url, function(data) {
 
 /*
 ----------------------------------------------------------------------
-2. helper functions 
+2. helper functions
 -----------------------------------------------------------------------
 */
 
@@ -54,15 +54,15 @@ app.analyseData = function(data) {
         const entry = data.feed.entry;
 
         for (var i = 0; i < entry.length; i++) { // loop data
-            
+
             if (entry[i].gsx$facebook.$t !== "" ) {
                 app.userData.facebook.push(entry[i].gsx$facebook.$t);
             }
-            
+
             if (entry[i].gsx$twitter.$t !== "") {
                 app.userData.twitter.push(entry[i].gsx$twitter.$t);
             }
-            
+
             if (entry[i].gsx$headline.$t !== "") {
                 app.userData.headline.push(entry[i].gsx$headline.$t);
             }
@@ -78,15 +78,15 @@ app.analyseData = function(data) {
             if (entry[i].gsx$relatedcrime.$t !== "") {
                 app.userData.relatedcrime.push(entry[i].gsx$relatedcrime.$t);
             }
-            
+
             if ( entry[i].gsx$map.$t  !== "") {
                 app.userData.map.push(entry[i].gsx$map.$t);
             }
-            
+
             if (entry[i].gsx$postit.$t !== "") {
                 app.userData.post_it_note.push(entry[i].gsx$postit.$t);
             }
-            
+
             app.userData.length += 1;
 
         } // end loop
@@ -95,62 +95,38 @@ app.analyseData = function(data) {
 
 /*
 ----------------------------------------------------------------------
-3. canvas 
+3. canvas
 -----------------------------------------------------------------------
 */
 
-var doc_canvas_width = 1200;
-var doc_canvas_height = 600;
-
-// function random_placement(x_coord, y_coord){
-//     // Pick a random spot on the wall to attach the image.
-//     var x = Math.floor(Math.random() * (doc_canvas_width - imageWidth));
-//     var y = Math.floor(Math.random() * (doc_canvas_height - img.height));
-// }
-
 app.makeCanvas = function(){
+    var doc_canvas_width = 1200;
+    var doc_canvas_height = 600;
+
     // Set up the canvas for the entire wall.
     var canvas = document.getElementById('wall');
-    canvas.width = 1200;
-    canvas.height = 600;
+    canvas.width = doc_canvas_width;
+    canvas.height = doc_canvas_height;
     var ctx = canvas.getContext('2d');
 
-    // Width of each image attached to the wall.
     var imageUrls = app.userData.image;
-    // ['images/DJT_Headshot_V2.jpg', 'images/Patrick-Bateman-Axe.jpg'];
     var imageCenters = [];
 
-    imageUrls.forEach(function (imageUrl, i) {
-        
-        var imageWidth = randomTime(113, 392);
-        // Load the image.
-        var img = new Image();
-        img.src = imageUrl;
-        img.onload = function () {
-            var ratio = imageWidth / img.width;
+    function getImages() {
+        imageUrls.forEach(function (imageUrl, i) {
+            // Width of each image attached to the wall.
+            var width = randomTime(113, 392);
 
-            // Create a new canvas for the image, and draw the image on it to scale.
-            var imgCanvas = document.createElement('canvas');
-            imgCanvas.width = imageWidth;
-            imgCanvas.height = img.height * ratio;
-            
-            var imgCtx = imgCanvas.getContext('2d');
-            imgCtx.scale(ratio, ratio);
-            imgCtx.drawImage(img, 0, 0);
-
-            // Pick a random spot on the wall to attach the image.
-            var x = Math.floor(Math.random() * (doc_canvas_width - imageWidth));
-            var y = Math.floor(Math.random() * (doc_canvas_height - img.height * ratio));
-            
-            ctx.drawImage(imgCanvas, x, y);
-
-            // Save the x, y of a point on the image where we can attach a string.
-            imageCenters.push({x: x + imgCanvas.width * .5, y: y + imgCanvas.height * .9});
-            // console.log(imageCenters);
-
-            drawStrings();
-        }
-    });
+            // Load the image.
+            var img = new Image();
+            img.src = imageUrl;
+            img.onload = function () {
+                var center = placeImage(img, width);
+                imageCenters.push(center);
+                drawStrings();
+            }
+        });
+    }
 
     function drawStrings() {
         // Wait until we have attached all the images before drawing strings.
@@ -205,61 +181,82 @@ app.makeCanvas = function(){
             ctx.fillText(app.userData.post_it_note[i], randomTime(44, 500), randomTime(44, 600) );
         }
     }
-    
+
 
     function getHeadlines(how_paranoid_value) {
-        var newCanvas = document.createElement('canvas');
-        var newCanvas_2 = newCanvas.getContext('2d');
-
-        newCanvas_2.width = 900;
-        newCanvas_2.height = 600;
-
         for (var i = 0; i < how_paranoid_value; i++) {
-            
+
             var split_text = app.userData.headline[i].split(" ");
 
             // console.log(split_text, i);
             var starting_number = Math.round(split_text.length / 3);
             var starting_number_plus_one = starting_number + 1;
-            
+
             var final_text = split_text.map(function(word, i){
                 if (i === starting_number) {
-                    return '<span style="color:black; background-color: black">' + word 
+                    return '<span style="color:black; background-color: black">' + word
                 } else if (i === starting_number_plus_one) {
                     return word + '</span>'
                 } else {
                     return word;
                 }
             }).join(" ");
-            
-            // console.log('final_text',final_text);
-            var headline_redacted = '<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300"><foreignObject width="100%" height="100%" background="yellow"><div xmlns="http://www.w3.org/1999/xhtml" style="font-size:42px">' + final_text + '</div></foreignObject></svg>';
-            
+
+            var width = 400;
+
+            var headline_redacted = (
+                '<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300">' +
+                    '<foreignObject width="100%" height="100%">' +
+                        '<div xmlns="http://www.w3.org/1999/xhtml" style="background: #ffe; font-size: 42px; padding: 20px 10px;">' +
+                            final_text +
+                        '</div>' +
+                    '</foreignObject>' +
+                '</svg>'
+            );
+
             var DOMURL = window.URL || window.webkitURL || window;
             var img = new Image();
 
             var svg = new Blob([headline_redacted], {type: 'image/svg+xml'});
             var url = DOMURL.createObjectURL(svg);
-            
+
+            img.src = url;
             img.onload = function () {
-              ctx.drawImage(img, 0, 0);
               ctx.shadowColor = '#999';
               ctx.shadowBlur = 13;
               ctx.shadowOffsetX = 5;
               ctx.shadowOffsetY = 5;
               DOMURL.revokeObjectURL(url);
+
+              placeImage(img, width);
             }
-            img.src = url;
-
-            var x = Math.floor(Math.random() * (doc_canvas_width - img.width));
-            var y = Math.floor(Math.random() * (doc_canvas_height - img.height));
-
-            console.log(x, y);
-            newCanvas_2.drawImage(img, x, y);
         }
     }
-    
+
+    function placeImage(img, width) {
+        var ratio = width / img.width;
+
+        // Create a new canvas for the image, and draw the image on it to scale.
+        var imgCanvas = document.createElement('canvas');
+        imgCanvas.width = width;
+        imgCanvas.height = img.height * ratio;
+
+        var imgCtx = imgCanvas.getContext('2d');
+        imgCtx.scale(ratio, ratio);
+        imgCtx.drawImage(img, 0, 0);
+
+        // Pick a random spot on the wall to attach the image.
+        var x = Math.floor(Math.random() * (doc_canvas_width - imgCanvas.width));
+        var y = Math.floor(Math.random() * (doc_canvas_height - imgCanvas.height));
+
+        ctx.drawImage(imgCanvas, x, y);
+
+        // Return the x, y of a point on the image where we can attach a string.
+        return {x: x + imgCanvas.width * .5, y: y + imgCanvas.height * .9};
+    }
+
     // functions
+    getImages();
     getPostIt(how_paranoid_value);
     getHeadlines(how_paranoid_value);
 
@@ -327,5 +324,3 @@ $('.person-img').click(function() {
 $('button.js-reset').on('click',function(){
     app.isMurdererInteractive();
 });
-
-
