@@ -61,7 +61,7 @@ app.analyseData = function(data) {
 
     } // end analyseData
 
-console.log( app.userData );
+
 
 
 /*
@@ -70,7 +70,7 @@ console.log( app.userData );
 -----------------------------------------------------------------------
 */
 app.makeCanvas = function(){
-    console.log('makeCanvas');
+    // console.log('makeCanvas');
     // Set up the canvas for the entire wall.
     var canvas = document.getElementById('wall');
     canvas.width = 800;
@@ -78,12 +78,16 @@ app.makeCanvas = function(){
     var ctx = canvas.getContext('2d');
 
     // Width of each image attached to the wall.
-    var imageWidth = 100;
 
-    var imageUrls = ['images/DJT_Headshot_V2.jpg', 'images/Patrick-Bateman-Axe.jpg'];
+    console.log( 'image', app.userData.image );
+
+    var imageUrls = app.userData.image;
+    // ['images/DJT_Headshot_V2.jpg', 'images/Patrick-Bateman-Axe.jpg'];
     var imageCenters = [];
 
     imageUrls.forEach(function (imageUrl, i) {
+        
+        var imageWidth = randomTime(100, 400);
         // Load the image.
         var img = new Image();
         img.src = imageUrl;
@@ -166,7 +170,7 @@ function randomTime(min, max) {
 }
 
 app.isMurdererInteractive = function() {
-    const randomNumber = randomTime(5, 2200);
+    const randomNumber = randomTime(100, 600);
 
     $('.wrapper-answer, .wrapper-again, #murder-interactive').removeClass('js-hide');
     $('.wrapper-answer h2').html('Yes →');
@@ -182,10 +186,10 @@ app.isMurdererInteractive = function() {
 }
 
 app.isNotMurdererInteractive = function() {
-    console.log('NOPE');
+    // console.log('NOPE');
     $('.wrapper-answer').removeClass('js-hide');
     $('.wrapper-answer h2').html('No ... some funny joke →');
-    $('#murder-interactive, .wrapper-again').addClass('js-hide');
+    $('#murder-interactive, .wrapper-again  ').addClass('js-hide');
 }
 
 
