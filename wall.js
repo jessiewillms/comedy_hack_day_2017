@@ -61,3 +61,22 @@ function drawStrings() {
         ctx.stroke();
     }
 }
+
+function getMapUrl(marker) {
+    // https://developers.google.com/maps/documentation/static-maps/intro
+
+    var params = {
+        size: '300x300',
+        zoom: 13,
+        style: ['feature:poi|visibility:off', 'feature:administrative|visibility:off'],
+        markers: encodeURIComponent(marker)
+    };
+
+    var qs = Object.keys(params).map(function (key) {
+        return [].concat(params[key]).map(function (value) {
+            return key + '=' + value;
+        }).join('&');
+    }).join('&');
+
+    return 'https://maps.googleapis.com/maps/api/staticmap?' + qs;
+}
