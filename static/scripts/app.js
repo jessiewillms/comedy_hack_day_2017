@@ -42,6 +42,8 @@ app.userData = {
     twitter: [],
     headline: [],
     image: [],
+    personalimage: [],
+    symbols: [],
     date: [],
     relatedcrime: [],
     map: [],
@@ -57,6 +59,14 @@ app.analyseData = function(data) {
 
             if (entry[i].gsx$facebook.$t !== "" ) {
                 app.userData.facebook.push(entry[i].gsx$facebook.$t);
+            }
+
+            if (entry[i].gsx$personalimage.$t !== "") {
+                app.userData.personalimage.push(entry[i].gsx$personalimage.$t);
+            }
+
+            if (entry[i].gsx$symbols.$t !== "") {
+                app.userData.symbols.push(entry[i].gsx$symbols.$t);
             }
 
             if (entry[i].gsx$twitter.$t !== "") {
@@ -317,7 +327,7 @@ $('#submit_button').click(function() {
 
     how_paranoid_value = $('input[name="how_paranoid"]:checked').val();
     
-    var get_input_name = $('input[name="friends-name"]').val();
+    var get_input_name = $('input[name="friends-name"]').val().toLowerCase();
 
     if ( get_input_name == 'conor holler' || get_input_name == 'Conor Holler' && how_paranoid_value !== 0) {
         app.isMurdererInteractive();

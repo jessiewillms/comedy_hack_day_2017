@@ -44,6 +44,9 @@ h1 {
 h2 {
 	color: #353434;
 	font-size: 2em;
+	
+}
+.wrapper-answer h2 {
 	text-transform: capitalize;
 }
 #submit_button {
