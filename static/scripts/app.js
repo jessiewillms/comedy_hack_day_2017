@@ -20,6 +20,15 @@ var getData = $.getJSON(url, function(data) {
         console.log("error");
     })
 
+/*
+----------------------------------------------------------------------
+2. helper functions 
+-----------------------------------------------------------------------
+*/
+
+function randomTime(min, max) {
+  return Math.round(Math.random() * (max - min) + min);
+}
 
 /*
 ----------------------------------------------------------------------
@@ -45,49 +54,75 @@ app.analyseData = function(data) {
         const entry = data.feed.entry;
 
         for (var i = 0; i < entry.length; i++) { // loop data
-            app.userData.facebook.push(entry[i].gsx$facebook.$t);
-            app.userData.twitter.push(entry[i].gsx$twitter.$t);
-            app.userData.headline.push(entry[i].gsx$headline.$t);
-            app.userData.image.push(entry[i].gsx$image.$t);
-            app.userData.date.push(entry[i].gsx$date.$t);
-            app.userData.relatedcrime.push(entry[i].gsx$relatedcrime.$t);
-            app.userData.map.push(entry[i].gsx$map.$t);
-            app.userData.post_it_note.push(entry[i].gsx$postit.$t);
+            
+            if (entry[i].gsx$facebook.$t !== "" ) {
+                app.userData.facebook.push(entry[i].gsx$facebook.$t);
+            }
+            
+            if (entry[i].gsx$twitter.$t !== "") {
+                app.userData.twitter.push(entry[i].gsx$twitter.$t);
+            }
+            
+            if (entry[i].gsx$headline.$t !== "") {
+                app.userData.headline.push(entry[i].gsx$headline.$t);
+            }
 
+            if (entry[i].gsx$image.$t !== "") {
+                app.userData.image.push(entry[i].gsx$image.$t);
+            }
+
+            if (entry[i].gsx$date.$t !== "") {
+                app.userData.date.push(entry[i].gsx$date.$t);
+            }
+
+            if (entry[i].gsx$relatedcrime.$t !== "") {
+                app.userData.relatedcrime.push(entry[i].gsx$relatedcrime.$t);
+            }
+            
+            if ( entry[i].gsx$map.$t  !== "") {
+                app.userData.map.push(entry[i].gsx$map.$t);
+            }
+            
+            if (entry[i].gsx$postit.$t !== "") {
+                app.userData.post_it_note.push(entry[i].gsx$postit.$t);
+            }
+            
             app.userData.length += 1;
 
         } // end loop
 
-
     } // end analyseData
-
-
-
 
 /*
 ----------------------------------------------------------------------
 3. canvas 
 -----------------------------------------------------------------------
 */
+
+var doc_canvas_width = 1200;
+var doc_canvas_height = 600;
+
+// function random_placement(x_coord, y_coord){
+//     // Pick a random spot on the wall to attach the image.
+//     var x = Math.floor(Math.random() * (doc_canvas_width - imageWidth));
+//     var y = Math.floor(Math.random() * (doc_canvas_height - img.height));
+// }
+
 app.makeCanvas = function(){
-    // console.log('makeCanvas');
     // Set up the canvas for the entire wall.
     var canvas = document.getElementById('wall');
-    canvas.width = 800;
+    canvas.width = 1200;
     canvas.height = 600;
     var ctx = canvas.getContext('2d');
 
     // Width of each image attached to the wall.
-
-    console.log( 'image', app.userData.image );
-
     var imageUrls = app.userData.image;
     // ['images/DJT_Headshot_V2.jpg', 'images/Patrick-Bateman-Axe.jpg'];
     var imageCenters = [];
 
     imageUrls.forEach(function (imageUrl, i) {
         
-        var imageWidth = randomTime(100, 400);
+        var imageWidth = randomTime(113, 392);
         // Load the image.
         var img = new Image();
         img.src = imageUrl;
@@ -98,17 +133,20 @@ app.makeCanvas = function(){
             var imgCanvas = document.createElement('canvas');
             imgCanvas.width = imageWidth;
             imgCanvas.height = img.height * ratio;
+            
             var imgCtx = imgCanvas.getContext('2d');
             imgCtx.scale(ratio, ratio);
             imgCtx.drawImage(img, 0, 0);
 
             // Pick a random spot on the wall to attach the image.
-            var x = Math.floor(Math.random() * (canvas.width - imageWidth));
-            var y = Math.floor(Math.random() * (canvas.height - img.height * ratio));
+            var x = Math.floor(Math.random() * (doc_canvas_width - imageWidth));
+            var y = Math.floor(Math.random() * (doc_canvas_height - img.height * ratio));
+            
             ctx.drawImage(imgCanvas, x, y);
 
             // Save the x, y of a point on the image where we can attach a string.
             imageCenters.push({x: x + imgCanvas.width * .5, y: y + imgCanvas.height * .9});
+            // console.log(imageCenters);
 
             drawStrings();
         }
@@ -158,6 +196,73 @@ app.makeCanvas = function(){
         return 'https://maps.googleapis.com/maps/api/staticmap?' + qs;
     }
 
+
+    function getPostIt(how_paranoid_value) {
+        for (var i = 0; i < how_paranoid_value; i++) {
+            var font_size_string = parseInt( randomTime(50, 300) ) + " serif";
+
+            ctx.font = "44px sans-serif" ;
+            ctx.fillText(app.userData.post_it_note[i], randomTime(44, 500), randomTime(44, 600) );
+        }
+    }
+    
+
+    function getHeadlines(how_paranoid_value) {
+        var newCanvas = document.createElement('canvas');
+        var newCanvas_2 = newCanvas.getContext('2d');
+
+        newCanvas_2.width = 900;
+        newCanvas_2.height = 600;
+
+        for (var i = 0; i < how_paranoid_value; i++) {
+            
+            var split_text = app.userData.headline[i].split(" ");
+
+            // console.log(split_text, i);
+            var starting_number = Math.round(split_text.length / 3);
+            var starting_number_plus_one = starting_number + 1;
+            
+            var final_text = split_text.map(function(word, i){
+                if (i === starting_number) {
+                    return '<span style="color:black; background-color: black">' + word 
+                } else if (i === starting_number_plus_one) {
+                    return word + '</span>'
+                } else {
+                    return word;
+                }
+            }).join(" ");
+            
+            // console.log('final_text',final_text);
+            var headline_redacted = '<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300"><foreignObject width="100%" height="100%" background="yellow"><div xmlns="http://www.w3.org/1999/xhtml" style="font-size:42px">' + final_text + '</div></foreignObject></svg>';
+            
+            var DOMURL = window.URL || window.webkitURL || window;
+            var img = new Image();
+
+            var svg = new Blob([headline_redacted], {type: 'image/svg+xml'});
+            var url = DOMURL.createObjectURL(svg);
+            
+            img.onload = function () {
+              ctx.drawImage(img, 0, 0);
+              ctx.shadowColor = '#999';
+              ctx.shadowBlur = 13;
+              ctx.shadowOffsetX = 5;
+              ctx.shadowOffsetY = 5;
+              DOMURL.revokeObjectURL(url);
+            }
+            img.src = url;
+
+            var x = Math.floor(Math.random() * (doc_canvas_width - img.width));
+            var y = Math.floor(Math.random() * (doc_canvas_height - img.height));
+
+            console.log(x, y);
+            newCanvas_2.drawImage(img, x, y);
+        }
+    }
+    
+    // functions
+    getPostIt(how_paranoid_value);
+    getHeadlines(how_paranoid_value);
+
 }
 /*
 ----------------------------------------------------------------------
@@ -165,21 +270,17 @@ app.makeCanvas = function(){
 -----------------------------------------------------------------------
 */
 
-function randomTime(min, max) {
-  return Math.round(Math.random() * (max - min) + min);
-}
-
 app.isMurdererInteractive = function() {
     const randomNumber = randomTime(100, 600);
 
     $('.wrapper-answer, .wrapper-again, #murder-interactive').removeClass('js-hide');
     $('.wrapper-answer h2').html('Yes →');
 
-    console.log( app.userData['facebook'][randomNumber] );
+    // console.log( app.userData['facebook'][randomNumber] );
 
     Object.values(app.userData['facebook']).map(function(key){
       return app.userData[randomNumber];
-      console.log( app.userData['facebook'][randomNumber] );
+      // console.log( app.userData['facebook'][randomNumber] );
   });
 
   app.makeCanvas();
@@ -193,18 +294,30 @@ app.isNotMurdererInteractive = function() {
 }
 
 
+/*
+----------------------------------------------------------------------
+5. click event to launch interactive
+-----------------------------------------------------------------------
+*/
+let how_paranoid_value;
 $('.person-img').click(function() {
-    // console.log('yes');
 
-    if ($(this).data('is-murderer') == 'yes') {
-        console.log('yes');
+    how_paranoid_value = $('input[name="how_paranoid"]:checked').val();
+    // console.log(how_paranoid_value);
+
+    $('.person-img').removeClass('js-active');
+    $(this).addClass('js-active');
+
+    if ( $(this).data('is-murderer') == 'yes' && how_paranoid_value !== 0) {
+        // console.log('yes');
         app.isMurdererInteractive();
-    } else {
-        console.log('no');
+    } else if ( $(this).data('is-murderer') == 'no' && how_paranoid_value !== 0 ) {
+        // console.log('no');
         app.isNotMurdererInteractive();
+    } else {
+        alert('pick something');
     }
 });
-
 
 /*
 ----------------------------------------------------------------------
@@ -213,7 +326,6 @@ $('.person-img').click(function() {
 */
 $('button.js-reset').on('click',function(){
     app.isMurdererInteractive();
-    // location.reload();
 });
 
 
