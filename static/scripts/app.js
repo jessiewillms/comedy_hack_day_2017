@@ -149,8 +149,20 @@ app.makeCanvas = function(){
     function getPostIt(i) {
         var font_size_string = parseInt( randomTime(50, 300) ) + " serif";
 
-        ctx.font = "44px sans-serif" ;
-        ctx.fillText(app.userData.post_it_note[i], randomTime(44, 500), randomTime(44, 600) );
+        var link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = 'https://fonts.googleapis.com/css?family=Gloria+Hallelujah';
+        document.getElementsByTagName('head')[0].appendChild(link);
+
+        // Trick from http://stackoverflow.com/questions/2635814/
+        var image = new Image;
+        image.src = link.href;
+        image.onerror = function() {
+            ctx.font = '44px "Gloria Hallelujah"';
+            ctx.fillStyle = '#c00';
+            ctx.fillText(app.userData.post_it_note[i], randomTime(44, 500), randomTime(44, 600));
+        };
     }
 
 

@@ -4,6 +4,9 @@
     box-sizing: border-box
 }
 
+canvas {
+    background: url('../images/cinder-block-cement-brick-wall.jpg') center/cover;
+}
 
 .cf:before,
 .cf:after {
@@ -23,17 +26,17 @@
     *zoom: 1;
 }
 
-@font-face {
+/*@font-face {
     font-family: 'JINKY';
     src: url('../jinky/JINKY.ttf');
     src: url('../jinky/JINKY-webfont.eot?iefix') format('eot'), url('../jinky/JINKY-webfont.woff') format('woff'), url('../jinky/JINKY-webfont.ttf') format('truetype'), url('../jinky/JINKY-webfont.svg#JINKY-webfont') format('svg');
-}
+}*/
 
 h1 {
     font-family: 'JINKY';
     font-size: 200px;
     text-align: center;
-    
+
     margin: 0;
     padding: 3%;
 }
@@ -105,7 +108,7 @@ main section {
 }
 
 input[type="radio"] {
-	margin-left: 10px; 
+	margin-left: 10px;
 }
 
 input[type="radio"]:checked+label {
