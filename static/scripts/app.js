@@ -109,58 +109,26 @@ app.makeCanvas = function(){
     canvas.height = doc_canvas_height;
     var ctx = canvas.getContext('2d');
 
-    var imageUrls = app.userData.image;
     var imageCenters = [];
 
-    function getImages() {
-        imageUrls.forEach(function (imageUrl, i) {
-            // Width of each image attached to the wall.
-            var width = randomTime(113, 392);
+    function getImages(i) {
+        // Width of each image attached to the wall.
+        var width = randomTime(113, 392);
 
-            // Load the image.
-            var img = new Image();
-            img.src = imageUrl;
-            img.onload = function () {
-                var center = placeImage(img, width);
-                imageCenters.push(center);
-                drawStrings();
-            }
-        });
-    }
-
-    function drawStrings() {
-        // Wait until we have attached all the images before drawing strings.
-        if (imageCenters.length < imageUrls.length) {
-            return;
-        }
-
-        while (imageCenters.length > 1) {
-            // Get the coordinates of two images at random.
-            var img1 = imageCenters.splice(Math.floor(Math.random() * imageCenters.length), 1)[0];
-            var img2 = imageCenters.splice(Math.floor(Math.random() * imageCenters.length), 1)[0];
-
-            var stringColor = '#ff0000';
-            var stringWidth = 2;
-            var gravity = 30;
-
-            // Draw a curved line between the two images.
-            ctx.beginPath();
-            ctx.strokeStyle = stringColor;
-            ctx.lineWidth = stringWidth;
-            ctx.moveTo(img1.x, img1.y);
-            ctx.bezierCurveTo(img1.x, img1.y + gravity, img2.x, img2.y + gravity, img2.x, img2.y);
-            ctx.stroke();
+        // Load the image.
+        var img = new Image();
+        img.src = app.userData.image[i];
+        img.onload = function () {
+            placeImage(img, width);
         }
     }
 
-    function getMapUrl(marker) {
-        // https://developers.google.com/maps/documentation/static-maps/intro
-
+    function getMaps(i) {
         var params = {
             size: '300x300',
             zoom: 13,
             style: ['feature:poi|visibility:off', 'feature:administrative|visibility:off'],
-            markers: encodeURIComponent(marker)
+            markers: encodeURIComponent(app.userData.map[i])
         };
 
         var qs = Object.keys(params).map(function (key) {
@@ -169,67 +137,67 @@ app.makeCanvas = function(){
             }).join('&');
         }).join('&');
 
-        return 'https://maps.googleapis.com/maps/api/staticmap?' + qs;
-    }
-
-
-    function getPostIt(how_paranoid_value) {
-        for (var i = 0; i < how_paranoid_value; i++) {
-            var font_size_string = parseInt( randomTime(50, 300) ) + " serif";
-
-            ctx.font = "44px sans-serif" ;
-            ctx.fillText(app.userData.post_it_note[i], randomTime(44, 500), randomTime(44, 600) );
+        // Load the image.
+        var img = new Image();
+        img.src = 'https://maps.googleapis.com/maps/api/staticmap?' + qs;
+        img.onload = function () {
+            placeImage(img, 300);
         }
     }
 
 
-    function getHeadlines(how_paranoid_value) {
-        for (var i = 0; i < how_paranoid_value; i++) {
+    function getPostIt(i) {
+        var font_size_string = parseInt( randomTime(50, 300) ) + " serif";
 
-            var split_text = app.userData.headline[i].split(" ");
+        ctx.font = "44px sans-serif" ;
+        ctx.fillText(app.userData.post_it_note[i], randomTime(44, 500), randomTime(44, 600) );
+    }
 
-            // console.log(split_text, i);
-            var starting_number = Math.round(split_text.length / 3);
-            var starting_number_plus_one = starting_number + 1;
 
-            var final_text = split_text.map(function(word, i){
-                if (i === starting_number) {
-                    return '<span style="color:black; background-color: black">' + word
-                } else if (i === starting_number_plus_one) {
-                    return word + '</span>'
-                } else {
-                    return word;
-                }
-            }).join(" ");
+    function getHeadlines(i) {
+        var split_text = app.userData.headline[i].split(" ");
 
-            var width = 400;
+        // console.log(split_text, i);
+        var starting_number = Math.round(split_text.length / 3);
+        var starting_number_plus_one = starting_number + 1;
 
-            var headline_redacted = (
-                '<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300">' +
-                    '<foreignObject width="100%" height="100%">' +
-                        '<div xmlns="http://www.w3.org/1999/xhtml" style="background: #ffe; font-size: 42px; padding: 20px 10px;">' +
-                            final_text +
-                        '</div>' +
-                    '</foreignObject>' +
-                '</svg>'
-            );
-
-            var DOMURL = window.URL || window.webkitURL || window;
-            var img = new Image();
-
-            var svg = new Blob([headline_redacted], {type: 'image/svg+xml'});
-            var url = DOMURL.createObjectURL(svg);
-
-            img.src = url;
-            img.onload = function () {
-              ctx.shadowColor = '#999';
-              ctx.shadowBlur = 13;
-              ctx.shadowOffsetX = 5;
-              ctx.shadowOffsetY = 5;
-              DOMURL.revokeObjectURL(url);
-
-              placeImage(img, width);
+        var final_text = split_text.map(function(word, i){
+            if (i === starting_number) {
+                return '<span style="color:black; background-color: black">' + word
+            } else if (i === starting_number_plus_one) {
+                return word + '</span>'
+            } else {
+                return word;
             }
+        }).join(" ");
+
+        var width = 400;
+
+        var headline_redacted = (
+            '<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300">' +
+                '<foreignObject width="100%" height="100%">' +
+                    '<div xmlns="http://www.w3.org/1999/xhtml" style="background: #ffe; font-size: 42px; padding: 20px 10px;">' +
+                        final_text +
+                    '</div>' +
+                '</foreignObject>' +
+            '</svg>'
+        );
+
+        var DOMURL = window.URL || window.webkitURL || window;
+        var img = new Image();
+
+        var svg = new Blob([headline_redacted], {type: 'image/svg+xml'});
+        var url = DOMURL.createObjectURL(svg);
+
+        img.src = url;
+        img.onload = function () {
+            ctx.shadowColor = '#999';
+            ctx.shadowBlur = 13;
+            ctx.shadowOffsetX = 5;
+            ctx.shadowOffsetY = 5;
+            DOMURL.revokeObjectURL(url);
+
+            placeImage(img, width);
         }
     }
 
@@ -252,14 +220,48 @@ app.makeCanvas = function(){
         ctx.drawImage(imgCanvas, x, y);
 
         // Return the x, y of a point on the image where we can attach a string.
-        return {x: x + imgCanvas.width * .5, y: y + imgCanvas.height * .9};
+        imageCenters.push({x: x + imgCanvas.width * .5, y: y + imgCanvas.height * .9});
+        drawStrings();
+    }
+
+
+    function drawStrings() {
+        // Wait until we have attached all the images before drawing strings.
+        if (imageCenters.length < (how_paranoid_value * 3)) {
+            return false;
+        }
+
+        var stringColors = ['#c00', '#00c', '#333'];
+
+        while (imageCenters.length > 1) {
+            // Get the coordinates of two images at random.
+            var img1 = imageCenters.splice(Math.floor(Math.random() * imageCenters.length), 1)[0];
+            var img2 = imageCenters.splice(Math.floor(Math.random() * imageCenters.length), 1)[0];
+
+            var stringColor = stringColors[Math.floor(Math.random() * stringColors.length)];
+            var stringWidth = 2;
+            var gravity = 30;
+
+            // Draw a curved line between the two images.
+            ctx.beginPath();
+            ctx.strokeStyle = stringColor;
+            ctx.lineWidth = stringWidth;
+            ctx.moveTo(img1.x, img1.y);
+            ctx.bezierCurveTo(img1.x, img1.y + gravity, img2.x, img2.y + gravity, img2.x, img2.y);
+            ctx.stroke();
+        }
+
+        return true;
     }
 
     // functions
-    getImages();
-    getPostIt(how_paranoid_value);
-    getHeadlines(how_paranoid_value);
 
+    for (var i = 0; i < how_paranoid_value; i++) {
+        getMaps(i);
+        getImages(i);
+        getPostIt(i);
+        getHeadlines(i);
+    }
 }
 /*
 ----------------------------------------------------------------------
