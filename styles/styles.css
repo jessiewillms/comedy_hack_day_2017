@@ -1,0 +1,32 @@
+/*================ Section: CSS setup ================*/
+
+* { box-sizing: border-box } 
+
+/*================ Section: CSS variables ================*/
+
+:root {
+  --base: #ffc600;
+  --spacing: 10px;
+  --blur: 10px;
+}
+
+/*================ Section: Base CSS ================*/
+
+img {
+	max-width: 100%;
+	margin: 0;
+	padding: 0;
+}
+
+.js-hide { display: none; }
+
+/*================ Section: Project CSS ================*/
+.wrapper-img img {
+	max-width: 20%;
+	border: 5px solid transparent;
+	float: left;
+}
+
+.wrapper-img img:hover {
+	border: 5px solid var(--base);
+}
