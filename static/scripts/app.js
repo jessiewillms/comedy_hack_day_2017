@@ -123,11 +123,35 @@ app.makeCanvas = function(){
 
     function getImages(i) {
         // Width of each image attached to the wall.
-        var width = randomTime(113, 392);
+        var width = randomTime(150, 350);
 
         // Load the image.
         var img = new Image();
         img.src = app.userData.image[i];
+        img.onload = function () {
+            placeImage(img, width);
+        }
+    }
+
+    function getPersonalImages(i) {
+        // Width of each image attached to the wall.
+        var width = randomTime(250, 420);
+
+        // Load the image.
+        var img = new Image();
+        img.src = app.userData.personalimage[i];
+        img.onload = function () {
+            placeImage(img, width);
+        }
+    }
+
+    function getSymbols(i) {
+        // Width of each image attached to the wall.
+        var width = randomTime(120, 320);
+
+        // Load the image.
+        var img = new Image();
+        img.src = app.userData.symbols[i];
         img.onload = function () {
             placeImage(img, width);
         }
@@ -249,7 +273,7 @@ app.makeCanvas = function(){
 
     function drawStrings() {
         // Wait until we have attached all the images before drawing strings.
-        if (imageCenters.length < (how_paranoid_value * 3)) {
+        if (imageCenters.length < (how_paranoid_value * 5)) {
             return false;
         }
 
@@ -261,7 +285,7 @@ app.makeCanvas = function(){
             var img2 = imageCenters.splice(Math.floor(Math.random() * imageCenters.length), 1)[0];
 
             var stringColor = stringColors[Math.floor(Math.random() * stringColors.length)];
-            var stringWidth = 2;
+            var stringWidth = 3;
             var gravity = 30;
 
             // Draw a curved line between the two images.
@@ -280,9 +304,14 @@ app.makeCanvas = function(){
 
     for (var i = 0; i < how_paranoid_value; i++) {
         getMaps(i);
+        getSymbols(i);
         getImages(i);
-        getPostIt(i);
         getHeadlines(i);
+        getPersonalImages(i);
+    }
+
+    for (var i = 0; i < how_paranoid_value; i++) {
+        getPostIt(i);
     }
 }
 /*
@@ -295,7 +324,7 @@ app.isMurdererInteractive = function() {
     const randomNumber = randomTime(100, 600);
 
     $('.wrapper-answer, .wrapper-again, #murder-interactive').removeClass('js-hide');
-    
+
     console.log(get_input_name)
 
     // console.log( app.userData['facebook'][randomNumber] );
@@ -326,7 +355,7 @@ let get_input_name;
 $('#submit_button').click(function() {
 
     how_paranoid_value = $('input[name="how_paranoid"]:checked').val();
-    
+
     var get_input_name = $('input[name="friends-name"]').val().toLowerCase();
 
     if ( get_input_name == 'conor holler' || get_input_name == 'Conor Holler' && how_paranoid_value !== 0) {
