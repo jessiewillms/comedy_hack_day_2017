@@ -233,7 +233,7 @@ input.radio ~ label {
 	user-select: none;*/
 }
 
-input.radio:empty ~ label:before {
+/*input.radio:empty ~ label:before {
 	position: absolute;
 	display: block;
 	top: 0;
@@ -243,10 +243,10 @@ input.radio:empty ~ label:before {
 	width: 2.5em;
 	background: #D1D3D4;
 	border-radius: 3px 0 0 3px;
-}
+}*/
 
 /* toggle hover */
-input.radio:hover:not(:checked) ~ label:before {
+/*input.radio:hover:not(:checked) ~ label:before {
 	content:'\2714';
 	text-indent: .9em;
 	color: #C2C2C2;
@@ -254,15 +254,15 @@ input.radio:hover:not(:checked) ~ label:before {
 
 input.radio:hover:not(:checked) ~ label {
 	color: #888;
-}
+}*/
 
 /* toggle on */
-input.radio:checked ~ label:before {
+/*input.radio:checked ~ label:before {
 	content:'\2714';
 	text-indent: .9em;
 	color: white;
 	background-color: var(--darker);
-}
+}*/
 
 input.radio:checked ~ label {
 	color: #777;
