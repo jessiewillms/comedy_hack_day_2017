@@ -351,14 +351,20 @@ $('button.js-reset').on('click',function(){
     app.isMurdererInteractive();
 });
 
-function downloadCanvas(link, canvasId, filename) {
-    link.href = document.getElementById(canvasId).toDataURL();
-    link.download = filename;
-}
-document.getElementById('download').addEventListener('click', function() {
-    downloadCanvas(this, 'canvas', 'test.png');
-}, false);
+// var canvas = document.getElementById("wall");
+// var dataURL = canvas.toDataURL();
 
+// var fullQuality = canvas.toDataURL("image/jpeg", 1.0);
+// var mediumQuality = canvas.toDataURL("image/jpeg", 0.5);
+// var lowQuality = canvas.toDataURL("image/jpeg", 0.1);
+// console.log(fullQuality);
 
+// function downloadCanvas(fullQuality, canvas, filename) {
+//     fullQuality.href = document.getElementById(canvas).toDataURL();
+//     fullQuality.download = filename;
+// }
 
+// document.getElementById('download').addEventListener('click', function() {
+//     downloadCanvas(this, 'canvas', 'test.png');
+// }, false);
 

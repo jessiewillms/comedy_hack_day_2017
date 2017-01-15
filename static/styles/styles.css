@@ -49,10 +49,22 @@ h2 {
 .wrapper-answer h2 {
 	text-transform: capitalize;
 }
-#submit_button {
+
+.button {
 	text-transform: lowercase;
+	width: 100%;
+	padding: 10px;
+
+	background: #dc143c;
+	color: white;
+	font-weight: bold;
+	margin: 10px 0;
+	border: 1px solid #dc143c !important;
 }
-#submit_button,
+#download {
+	font-weight: 900;
+}
+.button,
 p {
 	font-family: 'Roboto', sans-serif;
 }
@@ -116,8 +128,8 @@ input[type="radio"] {
 
 input[type="radio"]:checked+label {
     font-weight: bold;
-    color: var(--base);
-    background: lightgrey;
+    color: #333;
+    background: #D1D3D4;
 }
 
 
@@ -205,17 +217,12 @@ body {
 	margin: 20px auto 0 auto;
 	clear: both;
 }
-#submit_button {
-	width: 90px;
-	background: #dc143c;
-	color: white;
-	font-weight: bold;
-}
+
 .wrapper-img input {
 	padding: 10px;
 	border: 1px solid #D1D3D4;
 	border-radius: 3px;
-	width: calc(97% - 90px);
+	width: 100%;
 }
 
 label {
