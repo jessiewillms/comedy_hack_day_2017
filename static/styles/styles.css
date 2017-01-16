@@ -94,6 +94,10 @@ img {
 
 /*================ Section: Project CSS ================*/
 
+canvas {
+	display: block !important;
+	margin: 0 auto;
+}
 main {
     padding: 20px;
     background: white;

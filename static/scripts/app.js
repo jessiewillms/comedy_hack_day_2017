@@ -110,7 +110,7 @@ app.analyseData = function(data) {
 */
 
 app.makeCanvas = function(){
-    var doc_canvas_width = 1200;
+    var doc_canvas_width = 2200;
     var doc_canvas_height = 600;
 
     // Set up the canvas for the entire wall.
