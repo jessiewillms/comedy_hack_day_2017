@@ -48,6 +48,20 @@ function getRandomElement(arr) {
 
 app.analyseData = function(data) {
 
+    app.userData = {
+        facebook: [],
+        twitter: [],
+        headline: [],
+        image: [],
+        personalimage: [],
+        symbols: [],
+        date: [],
+        relatedcrime: [],
+        map: [],
+        post_it_note: [],
+        length: 0
+    }
+
         const entry = data.feed.entry;
 
         for (var i = 0; i < entry.length; i++) { // loop data
@@ -65,7 +79,7 @@ app.analyseData = function(data) {
             }
 
             if (entry[i].gsx$twitter.$t !== "") {
-                app.userData.twitter.push(entry[i].gsx$twitter.$t);
+                app.userData.twitter.push(entry[i].gsx$twitterimages.$t);
             }
 
             if (entry[i].gsx$headline.$t !== "") {
@@ -164,6 +178,38 @@ app.makeCanvas = function(){
         }
     }
 
+    function getFacebook(imageUrl) {
+        if (!imageUrl) {
+            return;
+        }
+
+        // Width of each image attached to the wall.
+        var width = 300;
+
+        // Load the image.
+        var img = new Image();
+        img.src = imageUrl;
+        img.onload = function () {
+            placeImage(img, width);
+        }
+    }
+
+    function getTwitter(imageUrl) {
+        if (!imageUrl) {
+            return;
+        }
+
+        // Width of each image attached to the wall.
+        var width = 300;
+
+        // Load the image.
+        var img = new Image();
+        img.src = imageUrl;
+        img.onload = function () {
+            placeImage(img, width);
+        }
+    }
+
     function getMaps(mapMarker) {
         if (!mapMarker) {
             return;
@@ -226,13 +272,12 @@ app.makeCanvas = function(){
         var split_text = text.split(" ");
 
         // console.log(split_text, i);
-        var starting_number = Math.round(split_text.length / 3);
-        var starting_number_plus_one = starting_number + 1;
+        var starting_number = Math.floor(Math.random() * split_text.length - 3);
 
         var final_text = split_text.map(function(word, i){
             if (i === starting_number) {
                 return '<span style="color:black; background-color: black">' + word
-            } else if (i === starting_number_plus_one) {
+            } else if (i === starting_number + 3) {
                 return word + '</span>'
             } else {
                 return word;
@@ -324,19 +369,21 @@ app.makeCanvas = function(){
 
     // functions
 
-    var userData = Object.assign({}, app.userData);
-
     for (var i = 0; i < how_paranoid_value; i++) {
-        getMaps(getRandomElement(userData.map));
-        getSymbols(getRandomElement(userData.symbols));
-        getImages(getRandomElement(userData.image));
-        getHeadlines(getRandomElement(userData.headline));
-        getPersonalImages(getRandomElement(userData.personalimage));
+        getMaps(getRandomElement(app.userData.map));
+        getFacebook(getRandomElement(app.userData.facebook));
+        getTwitter(getRandomElement(app.userData.twitter));
+        getSymbols(getRandomElement(app.userData.symbols));
+        getImages(getRandomElement(app.userData.image));
+        getHeadlines(getRandomElement(app.userData.headline));
+        getPersonalImages(getRandomElement(app.userData.personalimage));
     }
 
     for (var i = 0; i < how_paranoid_value; i++) {
-        getPostIt(getRandomElement(userData.post_it_note));
+        getPostIt(getRandomElement(app.userData.post_it_note));
     }
+
+
 
     setTimeout(drawStrings, 500);
 }
@@ -431,4 +478,3 @@ $('button.js-reset').on('click',function(){
 // document.getElementById('download').addEventListener('click', function() {
 //     downloadCanvas(this, 'canvas', 'test.png');
 // }, false);
-
