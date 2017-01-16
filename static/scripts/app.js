@@ -10,16 +10,6 @@ var app = {
 
 const url = "https://spreadsheets.google.com/feeds/list/1I1S0xuCvQbETfpfHFJQC7UGBqYpLv-RJFfLDKEr5L_w/1/public/values?alt=json-in-script&callback=?";
 
-var getData = $.getJSON(url, function(data) {
-
-    }).done(function(data) {
-        app.analyseData(data);
-        // console.log("done", data.feed.entry);
-    })
-    .fail(function() {
-        console.log("error");
-    })
-
 /*
 ----------------------------------------------------------------------
 2. helper functions
@@ -49,6 +39,11 @@ app.userData = {
     map: [],
     post_it_note: [],
     length: 0
+}
+
+
+function getRandomElement(arr) {
+    return arr.splice(Math.floor(Math.random() * arr.length), 1)[0];
 }
 
 app.analyseData = function(data) {
@@ -121,48 +116,64 @@ app.makeCanvas = function(){
 
     var imageCenters = [];
 
-    function getImages(i) {
+    function getImages(imageUrl) {
+        if (!imageUrl) {
+            return;
+        }
+
         // Width of each image attached to the wall.
         var width = randomTime(150, 350);
 
         // Load the image.
         var img = new Image();
-        img.src = app.userData.image[i];
+        img.src = imageUrl;
         img.onload = function () {
             placeImage(img, width);
         }
     }
 
-    function getPersonalImages(i) {
+    function getPersonalImages(imageUrl) {
+        if (!imageUrl) {
+            return;
+        }
+
         // Width of each image attached to the wall.
-        var width = randomTime(250, 420);
+        var width = randomTime(250, 380);
 
         // Load the image.
         var img = new Image();
-        img.src = app.userData.personalimage[i];
+        img.src = imageUrl;
         img.onload = function () {
             placeImage(img, width);
         }
     }
 
-    function getSymbols(i) {
+    function getSymbols(imageUrl) {
+        if (!imageUrl) {
+            return;
+        }
+
         // Width of each image attached to the wall.
         var width = randomTime(120, 320);
 
         // Load the image.
         var img = new Image();
-        img.src = app.userData.symbols[i];
+        img.src = imageUrl;
         img.onload = function () {
             placeImage(img, width);
         }
     }
 
-    function getMaps(i) {
+    function getMaps(mapMarker) {
+        if (!mapMarker) {
+            return;
+        }
+
         var params = {
             size: '300x300',
             zoom: 13,
             style: ['feature:poi|visibility:off', 'feature:administrative|visibility:off'],
-            markers: encodeURIComponent(app.userData.map[i])
+            markers: encodeURIComponent(mapMarker)
         };
 
         var qs = Object.keys(params).map(function (key) {
@@ -180,7 +191,11 @@ app.makeCanvas = function(){
     }
 
 
-    function getPostIt(i) {
+    function getPostIt(text) {
+        if (!text) {
+            return;
+        }
+
         var font_size_string = parseInt( randomTime(50, 300) ) + " serif";
 
         var link = document.createElement('link');
@@ -193,15 +208,22 @@ app.makeCanvas = function(){
         var image = new Image;
         image.src = link.href;
         image.onerror = function() {
+            var rot = (Math.random() * 40 - 20) * Math.PI / 180;
+            ctx.rotate(rot);
             ctx.font = '44px "Gloria Hallelujah"';
             ctx.fillStyle = '#c00';
-            ctx.fillText(app.userData.post_it_note[i], randomTime(44, 500), randomTime(44, 600));
+            ctx.fillText(text, randomTime(44, 500), randomTime(44, 600));
+            ctx.rotate(-rot);
         };
     }
 
 
-    function getHeadlines(i) {
-        var split_text = app.userData.headline[i].split(" ");
+    function getHeadlines(text) {
+        if (!text) {
+            return;
+        }
+
+        var split_text = text.split(" ");
 
         // console.log(split_text, i);
         var starting_number = Math.round(split_text.length / 3);
@@ -267,22 +289,22 @@ app.makeCanvas = function(){
 
         // Return the x, y of a point on the image where we can attach a string.
         imageCenters.push({x: x + imgCanvas.width * .5, y: y + imgCanvas.height * .9});
-        drawStrings();
     }
 
 
     function drawStrings() {
+        console.log(imageCenters.length, (how_paranoid_value * 5))
         // Wait until we have attached all the images before drawing strings.
-        if (imageCenters.length < (how_paranoid_value * 5)) {
-            return false;
-        }
+        // if (imageCenters.length < (how_paranoid_value * 5)) {
+        //     return false;
+        // }
 
         var stringColors = ['#c00', '#00c', '#333'];
 
         while (imageCenters.length > 1) {
             // Get the coordinates of two images at random.
-            var img1 = imageCenters.splice(Math.floor(Math.random() * imageCenters.length), 1)[0];
-            var img2 = imageCenters.splice(Math.floor(Math.random() * imageCenters.length), 1)[0];
+            var img1 = getRandomElement(imageCenters);
+            var img2 = getRandomElement(imageCenters);
 
             var stringColor = stringColors[Math.floor(Math.random() * stringColors.length)];
             var stringWidth = 3;
@@ -302,17 +324,21 @@ app.makeCanvas = function(){
 
     // functions
 
+    var userData = Object.assign({}, app.userData);
+
     for (var i = 0; i < how_paranoid_value; i++) {
-        getMaps(i);
-        getSymbols(i);
-        getImages(i);
-        getHeadlines(i);
-        getPersonalImages(i);
+        getMaps(getRandomElement(userData.map));
+        getSymbols(getRandomElement(userData.symbols));
+        getImages(getRandomElement(userData.image));
+        getHeadlines(getRandomElement(userData.headline));
+        getPersonalImages(getRandomElement(userData.personalimage));
     }
 
     for (var i = 0; i < how_paranoid_value; i++) {
-        getPostIt(i);
+        getPostIt(getRandomElement(userData.post_it_note));
     }
+
+    setTimeout(drawStrings, 500);
 }
 /*
 ----------------------------------------------------------------------
@@ -334,7 +360,16 @@ app.isMurdererInteractive = function() {
       // console.log( app.userData['facebook'][randomNumber] );
   });
 
-  app.makeCanvas();
+  $.getJSON(url, function(data) {
+      }).done(function(data) {
+          app.analyseData(data);
+          app.makeCanvas();
+          // console.log("done", data.feed.entry);
+      })
+      .fail(function() {
+          console.log("error");
+      })
+
 }
 
 app.isNotMurdererInteractive = function() {
