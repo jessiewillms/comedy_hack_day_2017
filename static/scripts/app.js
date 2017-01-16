@@ -221,7 +221,7 @@ app.makeCanvas = function(){
         var params = {
             size: '300x300',
             zoom: 13,
-            style: ['feature:poi|visibility:off', 'feature:administrative|visibility:off'],
+            style: ['feature:administrative|visibility:off'],
             markers: encodeURIComponent(mapMarker)
         };
 
