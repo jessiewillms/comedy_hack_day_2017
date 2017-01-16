@@ -8,7 +8,10 @@ var app = {
 
 };
 
-const url = "https://spreadsheets.google.com/feeds/list/1I1S0xuCvQbETfpfHFJQC7UGBqYpLv-RJFfLDKEr5L_w/1/public/values?alt=json-in-script&callback=?";
+const urls = {
+    'conor holler': 'https://spreadsheets.google.com/feeds/list/1I1S0xuCvQbETfpfHFJQC7UGBqYpLv-RJFfLDKEr5L_w/1/public/values?alt=json-in-script&callback=?',
+    'marcus kamps': 'https://spreadsheets.google.com/feeds/list/1I1S0xuCvQbETfpfHFJQC7UGBqYpLv-RJFfLDKEr5L_w/2/public/values?alt=json-in-script&callback=?'
+};
 
 /*
 ----------------------------------------------------------------------
@@ -119,8 +122,8 @@ app.analyseData = function(data) {
 */
 
 app.makeCanvas = function(){
-    var doc_canvas_width = 2200;
-    var doc_canvas_height = 600;
+    var doc_canvas_width = 2000;
+    var doc_canvas_height = 800;
 
     // Set up the canvas for the entire wall.
     var canvas = document.getElementById('wall');
@@ -258,7 +261,7 @@ app.makeCanvas = function(){
             ctx.rotate(rot);
             ctx.font = '44px "Gloria Hallelujah"';
             ctx.fillStyle = '#c00';
-            ctx.fillText(text, randomTime(44, 500), randomTime(44, 600));
+            ctx.fillText(text, randomTime(200, doc_canvas_width - 200), randomTime(100, doc_canvas_height - 100));
             ctx.rotate(-rot);
         };
     }
@@ -325,6 +328,7 @@ app.makeCanvas = function(){
         var imgCtx = imgCanvas.getContext('2d');
         imgCtx.scale(ratio, ratio);
         imgCtx.drawImage(img, 0, 0);
+        imgCtx.scale(1 / ratio, 1 / ratio);
 
         // Pick a random spot on the wall to attach the image.
         var x = Math.floor(Math.random() * (doc_canvas_width - imgCanvas.width));
@@ -393,7 +397,7 @@ app.makeCanvas = function(){
 -----------------------------------------------------------------------
 */
 
-app.isMurdererInteractive = function() {
+app.isMurdererInteractive = function(name) {
     const randomNumber = randomTime(100, 600);
 
     $('.wrapper-answer, .wrapper-again, #murder-interactive').removeClass('js-hide');
@@ -407,7 +411,7 @@ app.isMurdererInteractive = function() {
       // console.log( app.userData['facebook'][randomNumber] );
   });
 
-  $.getJSON(url, function(data) {
+  $.getJSON(urls[name], function(data) {
       }).done(function(data) {
           app.analyseData(data);
           app.makeCanvas();
@@ -438,18 +442,19 @@ $('#submit_button').click(function() {
 
     how_paranoid_value = $('input[name="how_paranoid"]:checked').val();
 
-    var get_input_name = $('input[name="friends-name"]').val().toLowerCase();
+    get_input_name = $('input[name="friends-name"]').val().toLowerCase();
 
-    if ( get_input_name == 'conor holler' || get_input_name == 'Conor Holler' && how_paranoid_value !== 0) {
-        app.isMurdererInteractive();
+    if (!how_paranoid_value) {
+        console.log('pick something');
+    }
+    else if (get_input_name in urls) {
+        app.isMurdererInteractive(get_input_name);
 
         $('.wrapper-answer h2').html(get_input_name);
         // console.log('yes');
-    } else if ( $('input[name="friends-name"]').val() !== 'conor holler' && how_paranoid_value !== 0 ) {
+    } else {
         // console.log('no');
         app.isNotMurdererInteractive();
-    } else {
-        console.log('pick something');
     }
 });
 
@@ -459,7 +464,7 @@ $('#submit_button').click(function() {
 -----------------------------------------------------------------------
 */
 $('button.js-reset').on('click',function(){
-    app.isMurdererInteractive();
+    app.isMurdererInteractive(get_input_name);
 });
 
 // var canvas = document.getElementById("wall");
